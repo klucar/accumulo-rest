@@ -105,6 +105,7 @@ public class ConnectorModule implements Module {
     Properties props = new Properties();
 
     System.getenv("ACCUMULO_HOME");
+    
     props.put(REST_USERNAME, "root");
     props.put(REST_PASSWORD, "secret");
     props.put(REST_INSTANCE, "accumulo");

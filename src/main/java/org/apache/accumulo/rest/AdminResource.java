@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -115,7 +116,7 @@ public class AdminResource {
   }
 
   @Path("/TableOperations/create/{tablename}")
-  @GET
+  @PUT
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
   public Table getTableCreate(@PathParam("tablename") String tablename,
                               @DefaultValue("true") @QueryParam("limitversion") String limitversion,
@@ -142,7 +143,7 @@ public class AdminResource {
   }
 
   @Path("/TableOperations/offline/{tablename}")
-  @GET
+  @PUT
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
   public Table getTableOffline(@PathParam("tablename") String tablename) {
     TableOperations tops = connector.tableOperations();
@@ -167,7 +168,7 @@ public class AdminResource {
   }
 
   @Path("/TableOperations/online/{tablename}")
-  @GET
+  @PUT
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
   public Table getTableOnline(@PathParam("tablename") String tablename) {
     TableOperations tops = connector.tableOperations();

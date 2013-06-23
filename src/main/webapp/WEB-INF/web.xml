@@ -5,11 +5,6 @@
 <web-app>
 	<display-name>Accumulo-REST</display-name>
 
-	<!-- context-param> <param-name>javax.ws.rs.core.Application</param-name> 
-		<param-value>org.apache.accumulo.rest.RESTApplication</param-value> </context-param> 
-		<listener> <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class> 
-		</listener -->
-
 	<context-param>
 		<param-name>resteasy.guice.modules</param-name>
 		<param-value>org.apache.accumulo.rest.ConnectorModule</param-value>
@@ -24,7 +19,12 @@
 		<param-name>resteasy.use.builtin.providers</param-name>
 		<param-value>true</param-value>
 	</context-param>
-
+	
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/accumulo</param-value>
+	</context-param>
+	
 	<!-- to return data according to extension -->
 	<context-param>
 		<param-name>resteasy.media.type.mappings</param-name>
@@ -49,12 +49,13 @@
 
 	<servlet-mapping>
 		<servlet-name>accumulo-rest</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/accumulo/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>RESTEasy JSAPI</servlet-name>
 		<url-pattern>/js_api</url-pattern>
 	</servlet-mapping>
+
 
 </web-app>
