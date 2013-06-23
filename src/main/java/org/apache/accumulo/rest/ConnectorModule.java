@@ -16,6 +16,8 @@
  */
 package org.apache.accumulo.rest;
 
+import java.util.Properties;
+
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -32,19 +34,17 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
 /**
- * Guice Module to support dependency injection of Accumulo parameters
- * required to create a singleton Connector object for use by 
- * the various Resources.
+ * Guice Module to support dependency injection of Accumulo parameters required to create a singleton Connector object for use by the various Resources.
  */
 public class ConnectorModule implements Module {
   
+  public static final String REST_INSTANCE = "accumulo.rest.instance";
+  public static final String REST_USERNAME = "accumulo.rest.username";
+  public static final String REST_PASSWORD = "accumulo.rest.password";
+  public static final String REST_ZOOKEEPERS = "accumulo.rest.zookeepers";
+  
   public void configure(final Binder binder) {
-    //TODO bind to a properties file or Accumulo configuration or something like that.
-    // bindProperty() is also available for Properties file binidings
-    binder.bindConstant().annotatedWith(Names.named("instanceName")).to("accumulo");
-    binder.bindConstant().annotatedWith(Names.named("zookeepers")).to("localhost:2181");
-    binder.bindConstant().annotatedWith(Names.named("username")).to("root");
-    binder.bindConstant().annotatedWith(Names.named("password")).to("secret");
+    Names.bindProperties(binder, loadProperties());
     binder.bind(Connector.class).toProvider(ConnectorProvider.class).in(Scopes.SINGLETON);
     binder.bind(AccumuloResource.class);
   }
@@ -57,8 +57,8 @@ public class ConnectorModule implements Module {
     private final String password;
     
     @Inject
-    public ConnectorProvider(@Named("instanceName") final String instanceName, @Named("zookeepers") final String zookeepers,
-        @Named("username") final String username, @Named("password") final String password) {
+    public ConnectorProvider(@Named(REST_INSTANCE) final String instanceName, @Named(REST_ZOOKEEPERS) final String zookeepers,
+        @Named(REST_USERNAME) final String username, @Named(REST_PASSWORD) final String password) {
       this.instanceName = instanceName;
       this.zookeepers = zookeepers;
       this.username = username;
@@ -72,15 +72,28 @@ public class ConnectorModule implements Module {
       try {
         conn = inst.getConnector(this.username, token);
       } catch (AccumuloException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        throw new RuntimeException("Accumulo internal exception: ", e);
       } catch (AccumuloSecurityException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        throw new RuntimeException("Accumulo security exception: ", e);
       }
       return conn;
     }
     
+  }
+  
+  /*
+   * Load properties required for injection
+   */
+  private Properties loadProperties() {
+    // TODO Load properties from appropriate place...
+    Properties props = new Properties();
+    
+    props.put(REST_USERNAME, "root");
+    props.put(REST_PASSWORD, "secret");
+    props.put(REST_INSTANCE, "accumulo");
+    props.put(REST_ZOOKEEPERS, "localhost:2181");
+    
+    return props;
   }
   
 }
