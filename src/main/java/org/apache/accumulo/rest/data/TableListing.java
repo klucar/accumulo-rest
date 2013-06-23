@@ -22,22 +22,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Simple Listing of Property results
  */
 @XmlRootElement(name = "listing")
-public class PropertyListing {
+public class TableListing {
   
-  private List<Property> properties;
+  private List<Table> tables;
   
-  public PropertyListing() {}
+  public TableListing() {}
   
-  public PropertyListing(List<Property> properties) {
-    this.properties = properties;
+  public TableListing(List<Table> tables) {
+    this.tables = tables;
   }
   
-  @XmlElement(name = "properties")
-  public List<Property> getProperties() {
-    return properties;
+  @XmlElement(name = "tables")
+  public List<Table> getTables() {
+    return tables;
   }
   
 }

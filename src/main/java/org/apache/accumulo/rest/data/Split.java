@@ -16,28 +16,31 @@
  */
 package org.apache.accumulo.rest.data;
 
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Simple Listing of Property results
+ * Accumulo Split result type
+ * 
  */
-@XmlRootElement(name = "listing")
-public class PropertyListing {
+@XmlRootElement(name = "split")
+public class Split {
   
-  private List<Property> properties;
+  private String name;
   
-  public PropertyListing() {}
+  public Split() {}
   
-  public PropertyListing(List<Property> properties) {
-    this.properties = properties;
+  public Split(String name) {
+    this.name = name;
+  }
+
+  @XmlElement
+  public String getName() {
+    return this.name;
   }
   
-  @XmlElement(name = "properties")
-  public List<Property> getProperties() {
-    return properties;
+  public void setName(String name) {
+    this.name = name;
   }
-  
+
 }

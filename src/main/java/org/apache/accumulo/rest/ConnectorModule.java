@@ -51,7 +51,7 @@ public class ConnectorModule implements Module {
     
     // For now, all Resource classes that require injection must be added here.
     binder.bind(PropertiesResource.class);
-    
+    binder.bind(AdminResource.class);
   }
   
   static class ConnectorProvider implements Provider<Connector> {
@@ -104,6 +104,7 @@ public class ConnectorModule implements Module {
     // TODO Load properties from appropriate place...
     Properties props = new Properties();
 
+    System.getenv("ACCUMULO_HOME");
     props.put(REST_USERNAME, "root");
     props.put(REST_PASSWORD, "secret");
     props.put(REST_INSTANCE, "accumulo");

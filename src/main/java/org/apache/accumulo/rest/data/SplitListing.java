@@ -22,22 +22,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Simple Listing of Property results
  */
 @XmlRootElement(name = "listing")
-public class PropertyListing {
+public class SplitListing {
   
-  private List<Property> properties;
+  private List<Split> splits;
   
-  public PropertyListing() {}
+  public SplitListing() {}
   
-  public PropertyListing(List<Property> properties) {
-    this.properties = properties;
+  public SplitListing(List<Split> splits) {
+    this.splits = splits;
   }
   
-  @XmlElement(name = "properties")
-  public List<Property> getProperties() {
-    return properties;
+  @XmlElement(name = "splits")
+  public List<Split> getSplits() {
+    return splits;
   }
   
 }
