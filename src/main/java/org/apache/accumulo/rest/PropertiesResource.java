@@ -16,41 +16,65 @@
  */
 package org.apache.accumulo.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Iterator;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.conf.AccumuloConfiguration;
+import org.apache.accumulo.rest.data.Property;
+import org.apache.accumulo.rest.data.PropertyListing;
 
 import com.google.inject.Inject;
 
 /**
  * 
  */
-@Path("/")
-public class AccumuloResource {
+@Path("Properties")
+public class PropertiesResource {
 
   private final Connector connector;
   
   @Inject
-  public AccumuloResource(final Connector connector) {
+  public PropertiesResource(final Connector connector) {
     this.connector = connector;
   }
   
+  @Path("{category}")
   @GET
-  @Produces("text/plain")
-  public String getAccumulo() {
+  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  public PropertyListing getProperties(@PathParam("category") String category) {
+    
     AccumuloConfiguration config = connector.getInstance().getConfiguration();
-    StringBuilder sb = new StringBuilder();
+    
+    List<Property> properties = new ArrayList<Property>();
+    
     for( Iterator<Entry<String,String>> iter = config.iterator(); iter.hasNext(); ){
       Entry<String,String> entry = iter.next();
-      sb.append(entry.getKey()).append(" = ").append(entry.getValue()).append("\n");
+      String key = entry.getKey();
+      String value = entry.getValue();
+      if( key.startsWith(category) || category.equals("all")){
+        // mask any property that contains the word password
+        if( key.contains("password")){
+          value = "********";
+        }
+        properties.add(new Property(key, value));
+      }
     }
-    return sb.toString();
+    return new PropertyListing(properties);
+  }
+  
+  @GET
+  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  public PropertyListing getProperties() {
+    return getProperties("all");
   }
   
 }

@@ -23,6 +23,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
+import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 
 import com.google.inject.Binder;
@@ -38,15 +39,19 @@ import com.google.inject.name.Names;
  */
 public class ConnectorModule implements Module {
   
-  public static final String REST_INSTANCE = "accumulo.rest.instance";
-  public static final String REST_USERNAME = "accumulo.rest.username";
-  public static final String REST_PASSWORD = "accumulo.rest.password";
-  public static final String REST_ZOOKEEPERS = "accumulo.rest.zookeepers";
+  public static final String REST_INSTANCE = "rest.instance";
+  public static final String REST_USERNAME = "rest.username";
+  public static final String REST_PASSWORD = "rest.password";
+  public static final String REST_ZOOKEEPERS = "rest.zookeepers";
+  public static final String REST_TOKEN_TYPE = "rest.token.type";
   
   public void configure(final Binder binder) {
     Names.bindProperties(binder, loadProperties());
     binder.bind(Connector.class).toProvider(ConnectorProvider.class).in(Scopes.SINGLETON);
-    binder.bind(AccumuloResource.class);
+    
+    // For now, all Resource classes that require injection must be added here.
+    binder.bind(PropertiesResource.class);
+    
   }
   
   static class ConnectorProvider implements Provider<Connector> {
@@ -55,19 +60,30 @@ public class ConnectorModule implements Module {
     private final String zookeepers;
     private final String username;
     private final String password;
+    private final String tokenClassname;
     
     @Inject
-    public ConnectorProvider(@Named(REST_INSTANCE) final String instanceName, @Named(REST_ZOOKEEPERS) final String zookeepers,
-        @Named(REST_USERNAME) final String username, @Named(REST_PASSWORD) final String password) {
+    public ConnectorProvider(@Named(REST_INSTANCE) final String instanceName, 
+        @Named(REST_ZOOKEEPERS) final String zookeepers,
+        @Named(REST_TOKEN_TYPE) final String tokenClassname, 
+        @Named(REST_USERNAME) final String username, 
+        @Named(REST_PASSWORD) final String password) {
       this.instanceName = instanceName;
       this.zookeepers = zookeepers;
+      this.tokenClassname = tokenClassname;
       this.username = username;
       this.password = password;
     }
     
     public Connector get() {
       Instance inst = new ZooKeeperInstance(this.instanceName, zookeepers);
-      PasswordToken token = new PasswordToken(this.password);
+
+      // TODO fix this up to handle other AuthenticationToken types
+      AuthenticationToken token = null;
+      if( tokenClassname.equals(PasswordToken.class.getCanonicalName())){
+        token = new PasswordToken(this.password);
+      }
+      
       Connector conn = null;
       try {
         conn = inst.getConnector(this.username, token);
@@ -87,12 +103,12 @@ public class ConnectorModule implements Module {
   private Properties loadProperties() {
     // TODO Load properties from appropriate place...
     Properties props = new Properties();
-    
+
     props.put(REST_USERNAME, "root");
     props.put(REST_PASSWORD, "secret");
     props.put(REST_INSTANCE, "accumulo");
     props.put(REST_ZOOKEEPERS, "localhost:2181");
-    
+    props.put(REST_TOKEN_TYPE, "org.apache.accumulo.core.client.security.tokens.PasswordToken");
     return props;
   }
   

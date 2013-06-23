@@ -16,14 +16,28 @@
  */
 package org.apache.accumulo.rest.data;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * 
  */
-@XmlRootElement(name = "info")
-public class Info {
+@XmlRootElement(name = "listing")
+public class PropertyListing {
+  
+  private List<Property> properties;
+  
+  public PropertyListing() {}
+  
+  public PropertyListing(List<Property> properties) {
+    this.properties = properties;
+  }
+  
+  @XmlElement(name = "properties")
+  public List<Property> getProperties() {
+    return properties;
+  }
   
 }
