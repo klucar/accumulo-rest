@@ -1,28 +1,73 @@
 <!doctype html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="accumuloApp">
 <head>
-  <meta charset="utf-8">
-  <title>My AngularJS App</title>
-  <link rel="stylesheet" href="css/app.css"/>
+<meta charset="utf-8">
+<title>ngAccumulo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+	href="lib/bootstrap/css/bootstrap-combined.no-icons.min.css" />
+<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
 </head>
+
 <body>
-  <ul class="menu">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-  </ul>
+	<ul class="menu">
+		<li><a href="#/view1">view1</a></li>
+		<li><a href="#/view2">view2</a></li>
+	</ul>
+ 
+	<div class="row">
+		<div class="span4">
+			<i class="icon-camera-retro icon-large"></i> icon-camera-retro <br />
+		</div>
+	</div>
+	<div class="row">
+		<div class="span9">
+			<h3>It's More Powerful with Bootstrap!</h3>
+			<ul class="inline">
+				<li>
+					<h4>
+						<center>
+							<code>.img-polaroid</code>
+						</center>
+					</h4> <img class="img-polaroid" ph-img="160x160" />
+				</li>
+				<li>
+					<h4>
+						<center>
+							<code>.img-circle</code>
+						</center>
+					</h4> <img class="img-circle" ph-img="160x160" />
+				</li>
+				<li>
+					<h4>
+						<center>
+							<code>.img-rounded</code>
+						</center>
+					</h4> <img class="img-rounded" ph-img="160x160" />
+				</li>
+			</ul>
+		</div>
+		<div class="span3">
+			<p ph-txt="3s"></p>
+		</div>
+	</div>
+	 
+	<div ng-view></div>
 
-  <div ng-view></div>
-
-  <div>Angular seed app: v<span app-version></span></div>
-
-  <!-- In production use:
+	<div>
+		ngAccumulo: v<span app-version></span>
+	</div>
+ 
+	<!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
-  <script src="lib/angular/angular.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/directives.js"></script>
+	<script src="lib/angular/angular.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/services.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="js/filters.js"></script>
+	<script src="js/directives.js"></script>
+	<script src="lib/placeholders/placeholders-0.0.1-SNAPSHOT.js"></script>
+	<script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script>
 </body>
 </html>
