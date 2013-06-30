@@ -3,71 +3,56 @@
 <head>
 <meta charset="utf-8">
 <title>ngAccumulo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet"
-	href="lib/bootstrap/css/bootstrap-combined.no-icons.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap-combined.no-icons.min.css" />
+<link rel="stylesheet" href="css/app.css" />
 <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
 </head>
 
-<body>
-	<ul class="menu">
-		<li><a href="#/view1">view1</a></li>
-		<li><a href="#/view2">view2</a></li>
-	</ul>
- 
-	<div class="row">
-		<div class="span4">
-			<i class="icon-camera-retro icon-large"></i> icon-camera-retro <br />
-		</div>
-	</div>
-	<div class="row">
-		<div class="span9">
-			<h3>It's More Powerful with Bootstrap!</h3>
-			<ul class="inline">
-				<li>
-					<h4>
-						<center>
-							<code>.img-polaroid</code>
-						</center>
-					</h4> <img class="img-polaroid" ph-img="160x160" />
-				</li>
-				<li>
-					<h4>
-						<center>
-							<code>.img-circle</code>
-						</center>
-					</h4> <img class="img-circle" ph-img="160x160" />
-				</li>
-				<li>
-					<h4>
-						<center>
-							<code>.img-rounded</code>
-						</center>
-					</h4> <img class="img-rounded" ph-img="160x160" />
-				</li>
-			</ul>
-		</div>
-		<div class="span3">
-			<p ph-txt="3s"></p>
-		</div>
-	</div>
-	 
-	<div ng-view></div>
+<body class="ng-cloak">
+  <div id="wrap">
+      <header class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="#">Accumulo</a>
+            <div class="nav-collapse">
+              <ul class="nav">
+                <li><a href="#/Monitor">Monitor</a></li>
+                <li><a href="#/Shell">Shell</a></li>
+                <li><a href="#/Proxy">Proxy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
 
-	<div>
-		ngAccumulo: v<span app-version></span>
-	</div>
- 
-	<!-- In production use:
+    <div class="container">
+  
+      <div ng-view></div>
+  
+    </div>
+  
+    <div id="push"></div>
+  </div> <!-- wrap -->
+
+  <div id="footer">
+    <div class="container">
+      <p class="muted credit pull-right">
+        Powered By: <a href="http://accumulo.apache.org">Apache Accumulo</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   -->
-	<script src="lib/angular/angular.js"></script>
-	<script src="js/app.js"></script>
-	<script src="js/services.js"></script>
-	<script src="js/controllers.js"></script>
-	<script src="js/filters.js"></script>
-	<script src="js/directives.js"></script>
-	<script src="lib/placeholders/placeholders-0.0.1-SNAPSHOT.js"></script>
-	<script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script>
+  <script src="lib/angular/angular.js"></script>
+  <script src="js/accumuloApp.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="lib/placeholders/placeholders-0.0.1-SNAPSHOT.js"></script>
+  <script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script>
 </body>
 </html>

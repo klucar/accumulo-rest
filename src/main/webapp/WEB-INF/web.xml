@@ -7,7 +7,7 @@
 
 	<context-param>
 		<param-name>resteasy.guice.modules</param-name>
-		<param-value>org.apache.accumulo.rest.ConnectorModule</param-value>
+		<param-value>org.apache.accumulo.rest.ConnectorModule,org.apache.accumulo.rest.ProxyModule</param-value>
 	</context-param>
 
 	<context-param>
