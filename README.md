@@ -55,7 +55,7 @@ will create `target/accumulo-rest.war`
 ## Tech Bits
 
 * JAX-RS webapp that uses JBoss RESTEasy.
-* Google Guice injects a singleton connector into the REST resources and inject necessary Accumulo configuration information to the connector (username, password, zookeepers, etc).
+* Google Guice injects a singleton connector into the REST resources, handling necessary Accumulo configuration information (username, password, zookeepers, etc).
 * Root path contains a Single Page Application (SPA) built on AngularJS to interact with the REST api.
 * Everything built as if Accumulo adopts it, (e.g. package names are org.apache.accumulo)
 * Provies a Proxy service for the standard Accumulo Monitor, Hadoop HDFS, and Hadoop MapReduce monitor pages.
