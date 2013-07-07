@@ -1,0 +1,34 @@
+
+<div class="row">
+  <div class="span12">
+    <center>
+      <h4>{{$state.current.data.title}}</h4>
+    </center>
+  </div>
+
+  <div class="row">
+    <div class="span3">
+      <div class="well">
+        <ul class="nav nav-list">
+          <li ng-class="{ active: $state.includes('monitor.overview')}"><a href="#/monitor">Overview</a></li>
+          <li class="divider"></li>
+          <li ng-class="{ active: $state.includes('monitor.master')}"><a href="#/monitor/master">Master Server</a></li>
+          <li ng-class="{ active: $state.includes('monitor.tserver')}"><a href="#/monitor/tserver">Tablet
+              Servers</a></li>
+          <li ng-class="{ active: $state.includes('monitor.activity')}"><a href="#/monitor/activity">Server
+              Activity</a></li>
+          <li ng-class="{ active: $state.includes('monitor.gc')}"><a href="#/monitor/gc">Garbage Collector</a></li>
+          <li ng-class="{ active: $state.includes('monitor.tables')}"><a href="#/monitor/tables">Tables</a></li>
+          <li ng-class="{ active: $state.includes('monitor.traces')}"><a href="#/monitor/traces">Recent Traces</a></li>
+          <li ng-class="{ active: $state.includes('monitor.logs')}"><a href="#/monitor/logs">Recent Logs</a></li>
+          <li class="divider"></li>
+          <li ng-class="{ active: $state.includes('monitor.doc')}"><a href="#/monitor/doc">Documentation</a></li>
+          <li class="divider"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="span9">
+      <div class="well" ui-view></div>
+    </div>
+  </div>
+</div>

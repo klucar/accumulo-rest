@@ -2,10 +2,10 @@
 
 /* Controllers */
 
-angular.module('accumuloApp.controllers', []).
-  controller('MyCtrl1', [function() {
 
-  }])
-  .controller('MyCtrl2', [function() {
+accumuloApp.controller('MonitorCtrl',  [ '$scope', '$state',
+                                function ($scope, $state) {
 
-  }]);
+	// nothing yet
+	    
+}]);
