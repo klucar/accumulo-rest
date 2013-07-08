@@ -2,57 +2,44 @@
 <html lang="en" ng-app="accumuloApp">
 <head>
 <meta charset="utf-8">
-<title>ngAccumulo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<link rel="stylesheet" href="lib/bootstrap/css/bootstrap-combined.no-icons.min.css" />
-<!--  link rel="stylesheet" href="css/app.css" / -->
-<!-- link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css" -->
+<link rel='shortcut icon' type='image/png' href='img/favicon.png' />
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap-spacelab.min.css" />
+<link rel="stylesheet" href="css/app.css" />
 </head>
 
-<body class="ng-cloak">
-  <div id="wrap">
-      <header class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <a class="brand" href="#">Accumulo</a>
-            <div class="nav-collapse">
-              <ul class="nav">
-                <li><a href="#/Monitor">Monitor</a></li>
-                <li><a href="#/Shell">Shell</a></li>
-                <li><a href="#/Proxy">Proxy</a></li>
-              </ul>
-            </div>
-          </div>
+<!-- could easily use a custom property of the state here instead of 'name' -->
+<title ng-bind="$state.current.name + ' - ui-router'">ui-router</title>
+<body>
+  <header class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="#/">Accumulo</a>
+        <!--  div class="nav-collapse" -->
+          <ul class="nav">
+            <li ng-class="{ active: $state.includes('monitor') }"><a href="#/monitor">Monitor</a></li>
+            <li ng-class="{ active: $state.includes('shell') }"><a href="#/shell">Shell</a></li>
+            <li class="dropdown" ng-class="{ active: $state.includes('proxy') }" ng-controller="ProxyCtrl">
+              <a href="#/proxy" class="dropdown-toggle">Proxy<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li ng-repeat="proxy in proxies"><a href="{{proxy.path}}">{{proxy.name}}</a></li>
+                </ul>
+              </li>
+            <li ng-class="{ active: $state.includes('rest') }"><a href="#/rest">REST</a></li>
+          </ul>
         </div>
-      </header>
+      </div>
+  </header>
 
-    <div class="container">
-  
-      <div ng-view></div>
-  
-    </div>
-  
-    <div id="push"></div>
-  </div> <!-- wrap -->
+  <div class="container-fluid" ui-view></div>
 
-  <div id="footer">
-    <div class="container">
-      <p class="muted credit pull-right">
-        Powered By: <a href="http://accumulo.apache.org">Apache Accumulo</a>
-      </p>
-    </div>
-  </div>
 
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-  -->
   <script src="lib/angular/angular.js"></script>
-  <script src="js/accumuloApp.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/directives.js"></script>
-  <script src="lib/placeholders/placeholders-0.0.1-SNAPSHOT.js"></script>
+  <script src="lib/ui-router/angular-ui-router.js"></script>
   <script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script>
+  <script src="js/accumuloApp.js"></script>
+  <script src="js/controllers.js"></script>
+  <!-- script src="lib/placeholders/placeholders-0.0.1-SNAPSHOT.js"></script -->
+  <!-- script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script -->
 </body>
 </html>
