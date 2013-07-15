@@ -16,28 +16,23 @@
  */
 package org.apache.accumulo.rest;
 
-import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.accumulo.rest.data.Property;
+import org.apache.accumulo.rest.data.ShellResponse;
 
 /**
  * 
  */
-@Path("/Properties")
-public interface PropertiesResource {
+@Path("/Shell")
+public interface ShellResource {
   
-  @Path("/{category}")
+  @Path("/exec")
   @GET
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties(@PathParam("category") String category);
-  
-  @GET
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties();
+  public ShellResponse execShellCommand(@QueryParam("command") String command, @QueryParam("uuid") String uuid);
   
 }

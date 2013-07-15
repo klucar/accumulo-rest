@@ -16,28 +16,26 @@
  */
 package org.apache.accumulo.rest;
 
-import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.apache.accumulo.rest.data.Property;
+import org.apache.accumulo.rest.data.IteratorResponse;
+import org.apache.accumulo.rest.data.Key;
+import org.apache.accumulo.rest.data.ShellResponse;
 
 /**
  * 
  */
-@Path("/Properties")
-public interface PropertiesResource {
+@Path("/Scanner")
+public interface ScannerResource {
   
-  @Path("/{category}")
+  @Path("/")
   @GET
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties(@PathParam("category") String category);
-  
-  @GET
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties();
+  public IteratorResponse scan(@QueryParam("table") String tabe, @QueryParam("auths") String auths, @QueryParam("range") String range);
   
 }

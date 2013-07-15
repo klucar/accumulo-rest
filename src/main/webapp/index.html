@@ -16,29 +16,29 @@
       <div class="container-fluid">
         <a class="brand" href="#/">Accumulo</a>
         <!--  div class="nav-collapse" -->
-          <ul class="nav">
-            <li ng-class="{ active: $state.includes('monitor') }"><a href="#/monitor">Monitor</a></li>
-            <li ng-class="{ active: $state.includes('shell') }"><a href="#/shell">Shell</a></li>
-            <li class="dropdown" ng-class="{ active: $state.includes('proxy') }" ng-controller="ProxyCtrl">
-              <a href="#/proxy" class="dropdown-toggle">Proxy<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li ng-repeat="proxy in proxies"><a href="{{proxy.path}}">{{proxy.name}}</a></li>
-                </ul>
-              </li>
-            <li ng-class="{ active: $state.includes('rest') }"><a href="#/rest">REST</a></li>
-          </ul>
-        </div>
+        <ul class="nav">
+          <li ng-class="{ active: $state.includes('monitor') }"><a href="#/monitor">Monitor</a></li>
+          <li ng-class="{ active: $state.includes('shell') }"><a href="#/shell">Shell</a></li>
+          <li class="dropdown" ng-class="{ active: $state.includes('proxy') }" ng-controller="ProxyCtrl"><a
+            href="#/proxy" class="dropdown-toggle">Proxy: {{$state.current.data.name}}<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li ng-repeat="proxy in proxyList"><a href="{{proxy.path}}">{{proxy.name}}</a></li>
+            </ul></li>
+          <li ng-class="{ active: $state.includes('rest') }"><a href="#/rest">REST</a></li>
+        </ul>
       </div>
+    </div>
   </header>
 
   <div class="container-fluid" ui-view></div>
 
-
   <script src="lib/angular/angular.js"></script>
   <script src="lib/ui-router/angular-ui-router.js"></script>
   <script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script>
+  <script src="lib/x2js/xml2json.js"></script>
   <script src="js/accumuloApp.js"></script>
   <script src="js/controllers.js"></script>
+  
   <!-- script src="lib/placeholders/placeholders-0.0.1-SNAPSHOT.js"></script -->
   <!-- script src="lib/ui-bootstrap/ui-bootstrap-custom-0.3.0.js"></script -->
 </body>

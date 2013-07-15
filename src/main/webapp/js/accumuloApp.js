@@ -8,7 +8,7 @@ accumuloApp.config([ '$stateProvider', '$routeProvider',
 		function($stateProvider, $routeProvider) {
 			$routeProvider.when('', {
 				redirectTo : '/#'
-			});
+			}).when("/proxy", {redirectTo: "/proxy/accumulo"});
 
 			$stateProvider.state('main', {
 				url : "/",
@@ -90,16 +90,29 @@ accumuloApp.config([ '$stateProvider', '$routeProvider',
 			.state('proxy', {
 				url : "/proxy", // root route
 				templateUrl : 'partials/proxy.html',
-				controller : 'ProxyCtrl'
+				abstract:true,
+				controller : 'ProxyStateCtrl'
 			}).state('proxy.hdfs', {
-				url : "/hdfs", 
-				template : '<p>proxy hdfs</p>'
+				url : "/hdfs",
+				templateUrl : 'partials/proxy.html',
+				data : {
+					url : 'accumulo/Proxy/Hdfs',
+					name : 'HDFS'
+				}
 			}).state('proxy.mapreduce', {
 				url : "/mapreduce", // root route
-				template : '<p>proxy mapreduce</p>'
+				templateUrl : 'partials/proxy.html',
+				data : {
+					url : 'accumulo/Proxy/Mapreduce',
+					name : 'MapReduce'
+				}
 			}).state('proxy.accumulo', {
 				url : "/accumulo", // root route
-				template : '<p>proxy accumulo</p>'
+				templateUrl : 'partials/proxy.html',
+				data : {
+					url : 'accumulo/Proxy/Monitor',
+					name : 'Monitor'
+				}
 			})
 			//
 			// REST
@@ -109,6 +122,17 @@ accumuloApp.config([ '$stateProvider', '$routeProvider',
 				template : '<p>rest url</p>'
 			});
 		} ]);
+
+accumuloApp.value('proxies', [ {
+	name : 'HDFS',
+	path : '#/proxy/hdfs'
+}, {
+	name : 'Map/Reduce',
+	path : '#/proxy/mapreduce'
+}, {
+	name : 'Accumulo',
+	path : '#/proxy/accumulo'
+} ]);
 
 // allow $state in templates
 accumuloApp.run(function($rootScope, $state, $stateParams) {

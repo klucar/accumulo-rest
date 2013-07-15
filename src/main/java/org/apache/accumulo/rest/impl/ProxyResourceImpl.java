@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.accumulo.rest;
+package org.apache.accumulo.rest.impl;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -27,29 +26,48 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 
+import org.apache.accumulo.rest.inject.ProxyModule;
 import org.apache.accumulo.rest.inject.ProxyModule.ProxyMap;
+import org.apache.accumulo.rest.ProxyResource;
 
 import com.google.inject.Inject;
 
 /**
  * 
  */
-@Path("Proxy")
-public interface ProxyResource {
+public class ProxyResourceImpl implements ProxyResource {
   
-  @Path("/Monitor")
-  @GET
-  @Produces({MediaType.TEXT_HTML})
-  public String getMonitor();
+  private final ProxyMap proxies;
+  private final ResteasyClient client;
+
+  @Inject
+  public ProxyResourceImpl(final ProxyMap proxies) {
+    this.proxies=proxies;
+    this.client =  new ResteasyClientBuilder().build();
+  }
   
-  @Path("/Mapreduce")
-  @GET
-  @Produces({MediaType.TEXT_HTML})
-  public String getMapReduce();
+  private String getProxy(String proxyKey){
+    ResteasyWebTarget target = client.target(proxies.get(proxyKey));
+    Response response = target.request().get();
+    String value = response.readEntity(String.class);
+    response.close();
+    
+    return value;
+  }
   
-  @Path("/Hdfs")
-  @GET
-  @Produces({MediaType.TEXT_HTML})
-  public String getHdfs();  
+  public String getMonitor() {
+
+    return getProxy(ProxyModule.PROXY_ACCUMULO);
+  }
+
+  public String getMapReduce() {
+
+    return getProxy(ProxyModule.PROXY_MAPREDUCE);
+  }
+  
+  public String getHdfs() {
+
+    return getProxy(ProxyModule.PROXY_HDFS);
+  }
   
 }

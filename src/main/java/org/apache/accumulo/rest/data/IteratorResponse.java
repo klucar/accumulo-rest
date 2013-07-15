@@ -14,30 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.accumulo.rest;
+package org.apache.accumulo.rest.data;
 
-import java.util.List;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Iterator;
 
-import org.apache.accumulo.rest.data.Property;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.StreamingOutput;
 
 /**
  * 
  */
-@Path("/Properties")
-public interface PropertiesResource {
+public class IteratorResponse<T> implements StreamingOutput {
+
+  private Iterator<T> iter;
   
-  @Path("/{category}")
-  @GET
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties(@PathParam("category") String category);
+  public IteratorResponse(Iterator<T> iter){
+    this.iter = iter;
+  }
   
-  @GET
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties();
+  @Override
+  public void write(OutputStream output) throws IOException, WebApplicationException {
+
+    while(iter.hasNext()){
+      // TODO, proper JAXB marshalling here
+      output.write(iter.next().toString().getBytes());
+      output.write("\n".getBytes());
+      output.flush();
+    }
+    output.close();
+  }
   
 }

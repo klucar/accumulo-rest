@@ -1,5 +1,6 @@
-<div class="well" ui-view>
-  <ul>
-    <li ng-repeat="proxy in proxies"><a href="{{proxy.path}}">{{proxy.name}}</a></li>
-  </ul>
+<div class="row-fluid">
+  <iframe class="container well well-small span12" 
+          src="{{$state.current.data.url}}"
+          style="height: 896px;">
+  </iframe>
 </div>

@@ -14,42 +14,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.accumulo.rest;
+package org.apache.accumulo.rest.impl;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
-
-import org.apache.accumulo.rest.inject.ProxyModule.ProxyMap;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.security.Authorizations;
+import org.apache.accumulo.rest.ScannerResource;
+import org.apache.accumulo.rest.data.IteratorResponse;
 
 import com.google.inject.Inject;
 
 /**
  * 
  */
-@Path("Proxy")
-public interface ProxyResource {
+public class ScannerResourceImpl implements ScannerResource {
+
+  private final Connector connector;
   
-  @Path("/Monitor")
-  @GET
-  @Produces({MediaType.TEXT_HTML})
-  public String getMonitor();
-  
-  @Path("/Mapreduce")
-  @GET
-  @Produces({MediaType.TEXT_HTML})
-  public String getMapReduce();
-  
-  @Path("/Hdfs")
-  @GET
-  @Produces({MediaType.TEXT_HTML})
-  public String getHdfs();  
+  @Inject
+  public ScannerResourceImpl(final Connector connector) {
+    this.connector = connector;
+  }
+
+  @Override
+  public IteratorResponse scan(String table, String auths, String range) {
+    
+    Scanner scanner = null;
+    try {
+      scanner = connector.createScanner(table, new Authorizations(auths));
+    } catch (TableNotFoundException e) {
+      e.printStackTrace();
+    }
+    
+       
+    return new IteratorResponse(scanner.iterator());
+  }
   
 }

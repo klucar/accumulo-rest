@@ -16,8 +16,6 @@
  */
 package org.apache.accumulo.rest;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.DefaultValue;
@@ -29,185 +27,57 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.TableExistsException;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.client.admin.TableOperations;
-import org.apache.accumulo.core.client.admin.TimeType;
 import org.apache.accumulo.rest.data.Split;
-import org.apache.accumulo.rest.data.SplitListing;
 import org.apache.accumulo.rest.data.Table;
-import org.apache.accumulo.rest.data.TableListing;
-import org.apache.hadoop.io.Text;
-
-import com.google.inject.Inject;
 
 /**
  * 
  */
 @Path("Admin")
-public class AdminResource {
-  
-  private final Connector connector;
-  
-  @Inject
-  public AdminResource(final Connector connector) {
-    this.connector = connector;
-  }
+public interface AdminResource {
   
   @Path("/TableOperations/list")
   @GET
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public TableListing getTableList() {
-    // TODO not sure if I need to keep instantiating these
-    TableOperations tops = connector.tableOperations();
-    
-    List<Table> tables = new ArrayList<Table>();
-    for(String name : tops.list()){
-      tables.add( new Table(name));
-    }
-    return new TableListing(tables);
-  }
-
+  public List<Table> getTableList();
+  
   @Path("/TableOperations/listSplits/{tablename}")
   @GET
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public SplitListing getTableSplits(@PathParam("tablename") String tablename,
-                                     @DefaultValue("-1")@QueryParam("maxsplits") int maxsplits) {
-    // TODO not sure if I need to keep instantiating these
-    TableOperations tops = connector.tableOperations();
-
-    Collection<Text> splits = null;
-    try {
-      if (maxsplits <= 0) {
-        splits = tops.listSplits(tablename);
-      } else {
-        splits = tops.listSplits(tablename, maxsplits);
-      }
-    } catch (TableNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (AccumuloSecurityException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (AccumuloException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    
-    List<Split> splitList = new ArrayList<Split>();
-    for( Text split : splits ){
-      splitList.add( new Split( split.toString() ));
-    }
-    return new SplitListing(splitList);
-  }
+  public List<Split> getTableSplits(@PathParam("tablename") String tablename,
+                                     @DefaultValue("-1")@QueryParam("maxsplits") int maxsplits);    
 
   @Path("/TableOperations/exists/{tablename}")
   @GET
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public Table getTableExists(@PathParam("tablename") String tablename) {
-    TableOperations tops = connector.tableOperations();
-
-    boolean exists = tops.exists(tablename);
-    
-    return new Table(tablename, exists);
-  }
-
+  public Table getTableExists(@PathParam("tablename") String tablename);
+  
   @Path("/TableOperations/create/{tablename}")
   @PUT
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
   public Table getTableCreate(@PathParam("tablename") String tablename,
                               @DefaultValue("true") @QueryParam("limitversion") String limitversion,
-                              @DefaultValue("MILLIS")@QueryParam("timetype") String timetype) {
-    TableOperations tops = connector.tableOperations();
-
-    try {
-      
-      tops.create(tablename, Boolean.parseBoolean(limitversion), TimeType.valueOf(timetype));
-      
-    } catch (AccumuloException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (AccumuloSecurityException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (TableExistsException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    boolean exists = tops.exists(tablename);
-    
-    return new Table(tablename, exists);
-  }
-
+                              @DefaultValue("MILLIS")@QueryParam("timetype") String timetype);
   @Path("/TableOperations/offline/{tablename}")
   @PUT
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public Table getTableOffline(@PathParam("tablename") String tablename) {
-    TableOperations tops = connector.tableOperations();
-
-    try {
-      
-      tops.offline(tablename);
-      
-    } catch (AccumuloException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (AccumuloSecurityException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (TableNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    boolean exists = tops.exists(tablename);
-
-    return new Table(tablename, exists, true);
-  }
-
+  public Table getTableOffline(@PathParam("tablename") String tablename);
+  
   @Path("/TableOperations/online/{tablename}")
   @PUT
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public Table getTableOnline(@PathParam("tablename") String tablename) {
-    TableOperations tops = connector.tableOperations();
-
-    try {
-      
-      tops.online(tablename);
-      
-    } catch (AccumuloException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (AccumuloSecurityException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (TableNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    boolean exists = tops.exists(tablename);
-
-    return new Table(tablename, exists, false);
-  }
+  public Table getTableOnline(@PathParam("tablename") String tablename);
   
   @Path("/InstanceOperations")
   @GET
   // @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
   @Produces(MediaType.TEXT_PLAIN)
-  public String getInstanceOperations() {
-    
-    return "Instance Operations";
-  }
+  public String getInstanceOperations();
 
   @Path("/SecurityOperations")
   @GET
   // @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
   @Produces(MediaType.TEXT_PLAIN)
-  public String getSecurityOperations() {
-    
-    return "Security Operations";
-  }
+  public String getSecurityOperations();
   
 }

@@ -14,30 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.accumulo.rest;
+package org.apache.accumulo.rest.data;
 
-import java.util.List;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.accumulo.rest.data.Property;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Accumulo Shell Response Container
  * 
  */
-@Path("/Properties")
-public interface PropertiesResource {
+@XmlRootElement(name = "shellResponse")
+public class ShellResponse {
   
-  @Path("/{category}")
-  @GET
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties(@PathParam("category") String category);
+  private String response;
+
+  public ShellResponse(){
+    response = "No Arg Constructor Response";
+  }
   
-  @GET
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public List<Property> getProperties();
+  public ShellResponse(String response) {
+    this.response = response;
+  }
+
+  @XmlElement
+  public String getResponse() {
+    return this.response;
+  }
   
 }
