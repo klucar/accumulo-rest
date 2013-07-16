@@ -82,7 +82,7 @@ accumuloApp.config([ '$stateProvider', '$routeProvider',
 			//
 			.state('shell', {
 				url : "/shell", // root route
-				template : '<p>shell url</p>'
+				template : '<p>Placeholer for the Shell</p>'
 			})
 			//
 			// Proxy
@@ -119,7 +119,7 @@ accumuloApp.config([ '$stateProvider', '$routeProvider',
 			//
 			.state('rest', {
 				url : "/rest", // root route
-				template : '<p>rest url</p>'
+				templateUrl : 'partials/rest.html'
 			});
 		} ]);
 

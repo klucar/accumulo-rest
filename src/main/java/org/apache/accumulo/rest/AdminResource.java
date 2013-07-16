@@ -27,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.accumulo.rest.data.InstanceData;
 import org.apache.accumulo.rest.data.Split;
 import org.apache.accumulo.rest.data.Table;
 
@@ -74,6 +75,12 @@ public interface AdminResource {
   @Produces(MediaType.TEXT_PLAIN)
   public String getInstanceOperations();
 
+  // I don't think this is an InstanceOperations thing, but seems to fit here for now
+  @Path("/InstanceOperations/instanceData")
+  @GET
+  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+  public InstanceData getInstanceData();
+  
   @Path("/SecurityOperations")
   @GET
   // @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

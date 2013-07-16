@@ -32,11 +32,13 @@ import javax.ws.rs.core.MediaType;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Instance;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.admin.TableOperations;
 import org.apache.accumulo.core.client.admin.TimeType;
 import org.apache.accumulo.rest.AdminResource;
+import org.apache.accumulo.rest.data.InstanceData;
 import org.apache.accumulo.rest.data.Split;
 import org.apache.accumulo.rest.data.Table;
 import org.apache.hadoop.io.Text;
@@ -60,17 +62,16 @@ public class AdminResourceImpl implements AdminResource {
     TableOperations tops = connector.tableOperations();
     
     List<Table> tables = new ArrayList<Table>();
-    for(String name : tops.list()){
-      tables.add( new Table(name));
+    for (String name : tops.list()) {
+      tables.add(new Table(name));
     }
     return tables;
   }
-
-  public List<Split> getTableSplits(String tablename,
-                                    int maxsplits) {
+  
+  public List<Split> getTableSplits(String tablename, int maxsplits) {
     // TODO not sure if I need to keep instantiating these
     TableOperations tops = connector.tableOperations();
-
+    
     Collection<Text> splits = null;
     try {
       if (maxsplits <= 0) {
@@ -90,25 +91,23 @@ public class AdminResourceImpl implements AdminResource {
     }
     
     List<Split> splitList = new ArrayList<Split>();
-    for( Text split : splits ){
-      splitList.add( new Split( split.toString() ));
+    for (Text split : splits) {
+      splitList.add(new Split(split.toString()));
     }
     return splitList;
   }
-
+  
   public Table getTableExists(String tablename) {
     TableOperations tops = connector.tableOperations();
-
+    
     boolean exists = tops.exists(tablename);
     
     return new Table(tablename, exists);
   }
-
-  public Table getTableCreate(String tablename,
-                              String limitversion,
-                              String timetype) {
+  
+  public Table getTableCreate(String tablename, String limitversion, String timetype) {
     TableOperations tops = connector.tableOperations();
-
+    
     try {
       
       tops.create(tablename, Boolean.parseBoolean(limitversion), TimeType.valueOf(timetype));
@@ -127,10 +126,10 @@ public class AdminResourceImpl implements AdminResource {
     
     return new Table(tablename, exists);
   }
-
+  
   public Table getTableOffline(String tablename) {
     TableOperations tops = connector.tableOperations();
-
+    
     try {
       
       tops.offline(tablename);
@@ -146,17 +145,15 @@ public class AdminResourceImpl implements AdminResource {
       e.printStackTrace();
     }
     boolean exists = tops.exists(tablename);
-
+    
     return new Table(tablename, exists, true);
   }
-
+  
   public Table getTableOnline(String tablename) {
     TableOperations tops = connector.tableOperations();
-
+    
     try {
-      
       tops.online(tablename);
-      
     } catch (AccumuloException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -168,15 +165,23 @@ public class AdminResourceImpl implements AdminResource {
       e.printStackTrace();
     }
     boolean exists = tops.exists(tablename);
-
+    
     return new Table(tablename, exists, false);
+  }
+  
+  public InstanceData getInstanceData() {
+    Instance inst = connector.getInstance();
+    String instName = inst.getInstanceName();
+    String instID = inst.getInstanceID();
+    
+    return new InstanceData(instName, instID);
   }
   
   public String getInstanceOperations() {
     
     return "Instance Operations";
   }
-
+  
   public String getSecurityOperations() {
     
     return "Security Operations";

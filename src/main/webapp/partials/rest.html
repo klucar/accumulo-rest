@@ -1,0 +1,13 @@
+<div ng-controller="RESTCtrl" class="container">
+  <div class="row-fluid well well-small container">
+    <span class="label label-info">Table</span> <input type="text" ng-model="table" size="80"></input>
+    <span class="label label-info">Auths</span> <input type="text" ng-model="auths" size="80"></input>
+    <button ng-click="scan()">scan</button>
+    <br> <span class="label label-info">Or</span>
+    <button ng-click="list()">List Tables</button>
+  </div>
+    <div class="row-fluid container well well-small">
+    <pre>http status code: {{status}}</pre>
+    <pre>http response data: {{data}}</pre>
+    </div>
+</div>

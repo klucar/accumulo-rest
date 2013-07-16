@@ -16,34 +16,42 @@
  */
 package org.apache.accumulo.rest.data;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Iterator;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.StreamingOutput;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Accumulo Split result type
  * 
  */
-public class IteratorResponse<T> implements StreamingOutput {
-
-  private Iterator<T> iter;
+@XmlRootElement(name = "instance")
+public class InstanceData {
   
-  public IteratorResponse(Iterator<T> iter){
-    this.iter = iter;
+  private String name;
+  private String id;
+  
+  public InstanceData() {}
+  
+  public InstanceData(String name, String id) {
+    this.name = name;
+    this.id = id;
+  }
+
+  @XmlElement
+  public String getName() {
+    return this.name;
   }
   
-  @Override
-  public void write(OutputStream output) throws IOException, WebApplicationException {
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    while(iter.hasNext()){
-      // TODO, proper JAXB marshalling here, and Base64 encoding
-      output.write(iter.next().toString().getBytes());
-      output.write("\n".getBytes());
-      output.flush();
-    }
-    output.close();
+  @XmlElement
+  public String getId() {
+    return this.id;
   }
   
+  public void setId(String id) {
+    this.id = id;
+  }
+
 }

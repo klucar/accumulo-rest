@@ -16,6 +16,7 @@
  */
 package org.apache.accumulo.rest;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -36,6 +37,8 @@ public interface ScannerResource {
   @Path("/")
   @GET
   @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public IteratorResponse scan(@QueryParam("table") String tabe, @QueryParam("auths") String auths, @QueryParam("range") String range);
+  public IteratorResponse scan(@QueryParam("table") String table, 
+                               @QueryParam("auths") @DefaultValue("test") String auths, 
+                               @QueryParam("range") @DefaultValue("") String range);
   
 }
